@@ -2,7 +2,7 @@
 
 Repositório integrante do Trabalho de Conclusão de Curso (TCC) em Engenharia de Controlo e Automação pela Universidade Federal do Rio Grande do Sul (UFRGS).
 
-Este projeto apresenta um protótipo de Sistema de Deteção de Intrusão (IDS) não invasivo projetado especificamente para atuar sobre o protocolo Modbus TCP em redes de Automação Industrial (OT). O sistema analisa o tráfego de rede de forma passiva através de escuta de interface (*sniffing*), operando de forma transparente e sem inserir atrasos ou latência no ciclo crítico de controlo (*polling* nominal de 80ms), priorizando o princípio de segurança física (*Safety*) conforme preconizado pelas diretrizes ISA/IEC 62443 e NIST SP 800-82r3.
+Este projeto apresenta um protótipo de Sistema de Deteção de Intrusão (IDS) não invasivo projetado especificamente para atuar sobre o protocolo Modbus TCP em redes de Automação Industrial (OT). O sistema analisa o tráfego de rede de forma passiva através de escuta de interface (*sniffing*), operando de forma transparente e sem inserir atrasos ou latência no ciclo crítico de controlo (*polling* nominal de 80ms), priorizando o princípio de segurança física (*Safety*) conforme preconizado pelas diretrizes ISA/IEC 62443.
 
 ## 🏗️ Arquitetura e Estrutura de Ficheiros
 
@@ -17,7 +17,7 @@ A solução é composta pelos seguintes artefatos principais, cobrindo o *testbe
 ## ✨ Regras de Deteção Implementadas
 
 1. **Regra 1 - Anomalia Volumétrica (DoS):** Monitorização contínua de vazão por meio de um algoritmo de Janela Deslizante (*Sliding Window*) de 1 segundo. Rajadas contínuas com taxa igual ou superior a `40.0 pkt/s` disparam alarmes de criticidade ALTA de Negação de Serviço.
-2. **Regra 2 - Controlo de Acesso (IP Whitelist):** Filtro estrito de pacotes com base nos endereços IP de origem autorizados no ecossistema industrial para envio de comandos de alteração de estado.
+2. **Regra 2 - Controle de Acesso (IP Whitelist):** Filtro estrito de pacotes com base nos endereços IP de origem autorizados no ecossistema industrial para envio de comandos de alteração de estado.
 3. **Regra 3 - Inspeção Profunda de Pacotes (DPI):** Validação semântica do cabeçalho Modbus TCP (Camada 7). Monitoriza e restringe a execução de *Function Codes* (FC) na rede. Comandos de escrita (como FC 15) são validados contra a identidade física do emissor, enquanto tentativas de injeção usando códigos anómalos ou ataques de *IP Spoofing* são bloqueadas e reportadas imediatamente.
 
 ## 🚀 Como Executar
