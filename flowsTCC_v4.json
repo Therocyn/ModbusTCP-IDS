@@ -1,0 +1,328 @@
+[
+    {
+        "id": "2a521ad5f0c7e55c",
+        "type": "tab",
+        "label": "SOC IDS 2.0 - Final",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "broker_hivemq",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Public",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 15,
+        "cleansession": true,
+        "autoUnsubscribe": true
+    },
+    {
+        "id": "ui_base_soc",
+        "type": "ui-base",
+        "name": "SOC Base",
+        "path": "/dashboard",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 5,
+        "showDisconnectNotification": true,
+        "allowInstall": true
+    },
+    {
+        "id": "9d8bfd7e0d216779",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#15617e",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px",
+            "density": "default"
+        }
+    },
+    {
+        "id": "8aeeb859713b5e78",
+        "type": "ui-page",
+        "name": "Monitoramento ICS",
+        "ui": "ui_base_soc",
+        "path": "/gauge",
+        "icon": "gauge-low",
+        "layout": "notebook",
+        "theme": "9d8bfd7e0d216779",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "group_table_bottom",
+        "type": "ui-group",
+        "name": "Histórico de Auditoria",
+        "page": "8aeeb859713b5e78",
+        "width": "12",
+        "height": "1",
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "f270d1682dc7d707",
+        "type": "ui-group",
+        "name": "Telemetria em tempo real",
+        "page": "8aeeb859713b5e78",
+        "width": "6",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "763772ff1d0b96ba",
+        "type": "mqtt in",
+        "z": "2a521ad5f0c7e55c",
+        "name": "Vazão",
+        "topic": "ufrgs/tcc/vitor/ids/vazao",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "broker_hivemq",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 110,
+        "y": 100,
+        "wires": [
+            [
+                "02e05a231ce4ca00"
+            ]
+        ]
+    },
+    {
+        "id": "906ce974c29b0298",
+        "type": "mqtt in",
+        "z": "2a521ad5f0c7e55c",
+        "name": "Alertas",
+        "topic": "ufrgs/tcc/vitor/ids/alertas",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "broker_hivemq",
+        "inputs": 0,
+        "x": 110,
+        "y": 200,
+        "wires": [
+            [
+                "b9b1b697a576c7ab"
+            ]
+        ]
+    },
+    {
+        "id": "b9b1b697a576c7ab",
+        "type": "function",
+        "z": "2a521ad5f0c7e55c",
+        "name": "Middleware",
+        "func": "let history = flow.get('alertHistory') || [];\nhistory.unshift(msg.payload);\nif (history.length > 10) history.pop();\nflow.set('alertHistory', history);\n\nreturn [\n    { payload: history },\n    { payload: `ALERTA: ${msg.payload.tipo_alerta}` }\n];",
+        "outputs": 2,
+        "x": 310,
+        "y": 200,
+        "wires": [
+            [
+                "d0798511aa1b3a50"
+            ],
+            [
+                "b97b1ee57155e4dd"
+            ]
+        ]
+    },
+    {
+        "id": "d0798511aa1b3a50",
+        "type": "ui-table",
+        "z": "2a521ad5f0c7e55c",
+        "group": "group_table_bottom",
+        "name": "Tabela",
+        "label": "Incidentes",
+        "order": 1,
+        "width": "0",
+        "height": "0",
+        "maxrows": "10",
+        "autocols": true,
+        "showSearch": false,
+        "deselect": true,
+        "selectionType": "none",
+        "columns": [
+            {
+                "title": "Hora",
+                "key": "",
+                "keyType": "key",
+                "width": ""
+            },
+            {
+                "title": "Ameaça",
+                "key": "",
+                "keyType": "key",
+                "width": ""
+            },
+            {
+                "title": "IP Origem",
+                "key": "",
+                "keyType": "key",
+                "width": ""
+            },
+            {
+                "title": "Risco",
+                "key": "",
+                "keyType": "key",
+                "width": ""
+            }
+        ],
+        "mobileBreakpoint": "sm",
+        "mobileBreakpointType": "defaults",
+        "action": "append",
+        "className": "",
+        "x": 510,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b97b1ee57155e4dd",
+        "type": "ui-notification",
+        "z": "2a521ad5f0c7e55c",
+        "ui": "ui_base_soc",
+        "position": "top right",
+        "color": "#ff0000",
+        "displayTime": "5",
+        "outputs": 1,
+        "name": "Notifica",
+        "x": 510,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "929bf58ddd18b61a",
+        "type": "ui-gauge",
+        "z": "2a521ad5f0c7e55c",
+        "name": "Pacotes",
+        "group": "f270d1682dc7d707",
+        "order": 1,
+        "value": "payload",
+        "valueType": "msg",
+        "width": "6",
+        "height": "5",
+        "gtype": "gauge-half",
+        "gstyle": "needle",
+        "title": "",
+        "alwaysShowTitle": false,
+        "units": "pkts/sec",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "0",
+                "color": "#5cd65c",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "20",
+                "color": "#ffc800",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "25",
+                "color": "#ea5353",
+                "text": "",
+                "textType": "label"
+            }
+        ],
+        "min": 0,
+        "max": "50",
+        "sizeThickness": "32",
+        "sizeGap": 4,
+        "sizeKeyThickness": 8,
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "",
+        "x": 460,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "02e05a231ce4ca00",
+        "type": "function",
+        "z": "2a521ad5f0c7e55c",
+        "name": "function 10",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 100,
+        "wires": [
+            [
+                "929bf58ddd18b61a"
+            ]
+        ]
+    },
+    {
+        "id": "1cc25957f8ba31a5",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "@flowfuse/node-red-dashboard": "1.30.2"
+        }
+    }
+]

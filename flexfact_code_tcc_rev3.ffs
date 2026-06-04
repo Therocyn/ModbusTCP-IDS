@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexFactConfiguration>
+<SimulationParameters>
+<OperatorPanel cnt="0"/>
+<FaultMonitor val="0"/>
+<Device type="Modbus"/>
+</SimulationParameters>
+<PlantComponents>
+<Machine id="PM1">
+<Position x="0" y="-1" phi="std"/>
+<FaultConfig enabled="no" id="Process Breakdown">
+<Stochastic t_f="0" enabled="no" t_r="0"/>
+</FaultConfig>
+<Parameters proc="A"/>
+</Machine>
+<ConveyorBelt id="CB1">
+<Position x="1" y="-1" phi="std"/>
+<FaultConfig enabled="no" id="Motor Breakdown">
+<Stochastic t_f="0" enabled="no" t_r="0"/>
+</FaultConfig>
+<FaultConfig enabled="no" id="Blind Sensor">
+<Stochastic t_f="0" enabled="no" t_r="0"/>
+</FaultConfig>
+<Parameters len="1"/>
+</ConveyorBelt>
+<Distributor id="DS1">
+<Position x="2" y="-1" phi="std"/>
+<Parameters len="1"/>
+</Distributor>
+<StackFeeder id="SF1">
+<Position x="-1" y="-1" phi="std"/>
+</StackFeeder>
+<ExitSlide id="XS1">
+<Position x="2" y="1" phi="+90"/>
+</ExitSlide>
+<ExitSlide id="XS2">
+<Position x="4" y="-1" phi="std"/>
+</ExitSlide>
+</PlantComponents>
+</FlexFactConfiguration>
